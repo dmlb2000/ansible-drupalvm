@@ -1,0 +1,34 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  vars:
+    drupalvm_version: 5.2.0
+    drupalvm_dir: "/etc/ansible/drupal-vm-{{ drupalvm_version }}"
+  pre_tasks:
+    - name: Fix Docker hosts file
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^::1'
+        state: absent
+        unsafe_writes: yes
+    - name: Try running Drupal VM
+      command: "ansible-playbook {{ drupalvm_dir }}/provisioning/playbook.yml"
+  tasks:
+    - name: Stat Drupal VM Directory
+      stat:
+        path: "{{ drupalvm_dir }}"
+      register: st
+    - name: Test Drupal VM Directory
+      assert:
+        that:
+          - st.stat.isdir is defined and st.stat.isdir
+    - name: Stat Pacifica Directory
+      stat:
+        path: "{{ drupalvm_dir }}/provisioning/roles/pacifica.ansible_pacifica"
+      register: st
+    - name: Test Pacifica Directory
+      assert:
+        that:
+          - st.stat.isdir is defined and st.stat.isdir

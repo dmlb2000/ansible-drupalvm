@@ -1,0 +1,36 @@
+---
+- name: Ensure ansible directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /etc/ansible
+
+- name: Set Drupal VM Prefix
+  set_fact:
+    drupalvm_dir: /etc/ansible/drupal-vm-{{ drupalvm_version }}
+
+- name: Download Drupal VM Source
+  get_url:
+    url: "https://github.com/geerlingguy/drupal-vm/archive/{{ drupalvm_version }}.tar.gz"
+    dest: /etc/ansible/drupal-vm.tar.gz
+    checksum: "{{ drupalvm_checksum }}"
+
+- name: Extract Drupal VM Source
+  unarchive:
+    remote_src: yes
+    src: /etc/ansible/drupal-vm.tar.gz
+    dest: /etc/ansible
+    creates: "{{ drupalvm_dir }}"
+
+- name: Install Pacifica Ansible Role
+  command:
+    argv:
+      - ansible-galaxy
+      - install
+      - "--roles-path={{ drupalvm_dir }}/provisioning/roles"
+      - "pacifica.ansible_pacifica,{{ pacifica_version }}"
+    creates: "{{ drupalvm_dir }}/provisioning/roles/pacifica.ansible_pacifica"
+
+- name: Include Distro Post Fixes
+  include_tasks: "post-tasks-{{ ansible_os_family }}.yml"

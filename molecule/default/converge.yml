@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include pacifica.ansible_drupalvm"
+      include_role:
+        name: "pacifica.ansible_drupalvm"

@@ -1,6 +1,4 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
   vars:
@@ -13,8 +11,24 @@
         regexp: '^::1'
         state: absent
         unsafe_writes: yes
+    - name: Drop Docker Compatible Config
+      copy:
+        content: |
+          hostname_configure: false
+          firewall_enabled: false
+          installed_extras:
+            - adminer
+            - drush
+            - mailhog
+            - pimpmylog
+          drupal_build_makefile: false
+          drupal_build_composer: false
+          drupal_build_composer_project: false
+          drupal_install_site: false
+        dest: "{{ drupalvm_dir }}/local.config.yml"
     - name: Try running Drupal VM
       command: "ansible-playbook {{ drupalvm_dir }}/provisioning/playbook.yml"
+      changed_when: false
   tasks:
     - name: Stat Drupal VM Directory
       stat:

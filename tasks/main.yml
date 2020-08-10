@@ -31,6 +31,3 @@
       - "--roles-path={{ drupalvm_dir }}/provisioning/roles"
       - "pacifica.ansible_pacifica,{{ pacifica_version }}"
     creates: "{{ drupalvm_dir }}/provisioning/roles/pacifica.ansible_pacifica"
-
-- name: Include Distro Post Fixes
-  include_tasks: "post-tasks-{{ ansible_os_family }}.yml"

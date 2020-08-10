@@ -2,7 +2,7 @@
 - name: Verify
   hosts: all
   vars:
-    drupalvm_version: 5.2.0
+    drupalvm_version: '6.0.0'
     drupalvm_dir: "/etc/ansible/drupal-vm-{{ drupalvm_version }}"
   pre_tasks:
     - name: Fix Docker hosts file
@@ -21,11 +21,17 @@
             - drush
             - mailhog
             - pimpmylog
+            - solr
           drupal_build_makefile: false
           drupal_build_composer: false
           drupal_build_composer_project: false
           drupal_install_site: false
         dest: "{{ drupalvm_dir }}/local.config.yml"
+    - name: Update Debian Cache
+      apt:
+        name: curl
+        update_cache: yes
+      when: ansible_os_family == "Debian"
     - name: Try running Drupal VM
       command: "ansible-playbook {{ drupalvm_dir }}/provisioning/playbook.yml"
       changed_when: false

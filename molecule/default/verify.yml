@@ -2,7 +2,7 @@
 - name: Verify
   hosts: all
   vars:
-    drupalvm_version: '6.0.0'
+    drupalvm_version: '6.0.1'
     drupalvm_dir: "/etc/ansible/drupal-vm-{{ drupalvm_version }}"
   pre_tasks:
     - name: Fix Docker hosts file
@@ -13,6 +13,7 @@
         unsafe_writes: yes
     - name: Drop Docker Compatible Config
       copy:
+        mode: '0644'
         content: |
           hostname_configure: false
           firewall_enabled: false

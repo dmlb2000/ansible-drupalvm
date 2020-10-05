@@ -1,6 +1,9 @@
 ---
 - name: Ensure ansible directory exists
   file:
+    mode: '0755'
+    owner: root
+    group: root
     path: "{{ item }}"
     state: directory
   loop:
@@ -15,6 +18,9 @@
     url: "https://github.com/geerlingguy/drupal-vm/archive/{{ drupalvm_version }}.tar.gz"
     dest: /etc/ansible/drupal-vm.tar.gz
     checksum: "{{ drupalvm_checksum }}"
+    mode: '0644'
+    owner: root
+    group: root
 
 - name: Extract Drupal VM Source
   unarchive:
@@ -22,6 +28,9 @@
     src: /etc/ansible/drupal-vm.tar.gz
     dest: /etc/ansible
     creates: "{{ drupalvm_dir }}"
+    owner: root
+    group: root
+    mode: u=rwX,g=rX,o=rX
 
 - name: Install Pacifica Ansible Role
   command:

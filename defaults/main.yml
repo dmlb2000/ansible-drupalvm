@@ -1,4 +1,4 @@
 ---
-drupalvm_version: 6.0.1
-drupalvm_checksum: sha256:e83ee7d6f7e1956e9567688961fce8a3d6a541f02ba46d09a33ef039689dbbec
+drupalvm_version: 6.0.3
+drupalvm_checksum: sha256:b412fafc82488e99269b2bc9d6d8facd5cf561ada183783baa0350c9ee1a28b8
 pacifica_version: v0.3.1
